@@ -2,8 +2,11 @@ import PyPDF2
 import textract
 from nltk.tokenize import word_tokenize
 from nltk.corpus import stopwords
+from nltk.tokenize import sent_tokenize
+import string
 
-filename = 'f1040nr.pdf'
+
+filename = 'ayat-ayat-cinta.pdf'
 pdfFileObj = open(filename, 'rb')
 
 pdfReader = PyPDF2.PdfFileReader(pdfFileObj)
@@ -27,4 +30,11 @@ if text != "":
 else :
     text = textract.process(filename, method='tesseract', language='eng')
 
-print(text)
+# tokenisasi kalimat
+text = sent_tokenize(text)
+
+for kalimat in text:
+    kalimat = kalimat.replace("\n", "")
+    kalimat = kalimat.translate(str.maketrans("","", string.punctuation))
+    print('kalimat :',kalimat)
+    print('\n')
