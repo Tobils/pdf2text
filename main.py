@@ -6,7 +6,7 @@ from nltk.tokenize import sent_tokenize
 import string
 import pandas as pd
 
-header = ["kalimat", "len"]
+header = ["kalimat", "len", "dengan_tanda_baca"]
 data_kalimat = []
 
 # baca file 
@@ -40,14 +40,17 @@ for kalimat in text:
     kalimat = kalimat.replace("\n", "") # delete new line
     kalimat = kalimat.replace("   ", " ") # delete 3 space
     kalimat = kalimat.replace("  ", " ") # delete 2 space
-    # kalimat = kalimat.translate(str.maketrans("","", string.punctuation))
+    kalimat_tanpa_tanda_baca = kalimat.translate(str.maketrans("","", string.punctuation))
 
     # filter karakter antara 20 sampai dengan 120 karakter
-    tmp = kalimat.replace(" ","")
+    tmp = kalimat_tanpa_tanda_baca.replace(" ","")
     if 20 <= len(tmp) <= 120 :
-        data_kalimat.append([kalimat, len(tmp)])
+        data_kalimat.append([kalimat_tanpa_tanda_baca, len(tmp), kalimat])
         df = pd.DataFrame(data_kalimat, columns=header)
 
 # data frame kalimat
 print(df)
+
+for data in df:
+    print(data)
 
