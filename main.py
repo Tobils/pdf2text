@@ -4,11 +4,14 @@ from nltk.tokenize import word_tokenize
 from nltk.corpus import stopwords
 from nltk.tokenize import sent_tokenize
 import string
+import pandas as pd
 
+header = ["kalimat", "len"]
+data_kalimat = []
 
+# baca file 
 filename = 'ayat-ayat-cinta.pdf'
 pdfFileObj = open(filename, 'rb')
-
 pdfReader = PyPDF2.PdfFileReader(pdfFileObj)
 
 # parse all over the pages
@@ -34,7 +37,17 @@ else :
 text = sent_tokenize(text)
 
 for kalimat in text:
-    kalimat = kalimat.replace("\n", "")
-    kalimat = kalimat.translate(str.maketrans("","", string.punctuation))
-    print('kalimat :',kalimat)
-    print('\n')
+    kalimat = kalimat.replace("\n", "") # delete new line
+    kalimat = kalimat.replace("   ", " ") # delete 3 space
+    kalimat = kalimat.replace("  ", " ") # delete 2 space
+    # kalimat = kalimat.translate(str.maketrans("","", string.punctuation))
+
+    # filter karakter antara 20 sampai dengan 120 karakter
+    tmp = kalimat.replace(" ","")
+    if 20 <= len(tmp) <= 120 :
+        data_kalimat.append([kalimat, len(tmp)])
+        df = pd.DataFrame(data_kalimat, columns=header)
+
+# data frame kalimat
+print(df)
+
